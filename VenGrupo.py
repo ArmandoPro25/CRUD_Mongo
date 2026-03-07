@@ -63,12 +63,8 @@ def Eliminar():
     else:
         print("No se encontraron resultados con la clave y el nombre proporcionados.") 
 
-# Configuración de la ventana
-window = tk.Tk()
-window.title("Agregar Grupo")
-window.geometry("600x400")
-window.resizable(0, 0)
-window.config(cursor="hand2")
+def Actualizar():
+    print("Función de actualizar grupo aún no implementada.")
 
 # Configuración de ventana emergente para eliminar
 def ConfirmarEliminacion(txt_cveGru, txt_nomGru):
@@ -79,11 +75,11 @@ def ConfirmarEliminacion(txt_cveGru, txt_nomGru):
     confirmacion.config(cursor="hand2")
 
     if (txt_cveGru != "" and txt_nomGru == ""):
-        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar el grupo con clave " + txt_cveGru + " ?", font=("Arial", 11))
+        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar\nel grupo con clave " + txt_cveGru + " ?", font=("Arial", 11))
     elif (txt_cveGru == "" and txt_nomGru != ""):
-        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar el grupo con nombre " + txt_nomGru + " ?", font=("Arial", 11))
+        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar\nel grupo con nombre " + txt_nomGru + " ?", font=("Arial", 11))
     else:
-        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar el grupo " + txt_nomGru + " con clave " + txt_cveGru + " ?", font=("Arial", 11))
+        lbl_confirmacion = tk.Label(confirmacion, text="¿Está seguro de eliminar\nel grupo " + txt_nomGru + " con clave " + txt_cveGru + " ?", font=("Arial", 11))
     
     lbl_confirmacion.pack(pady=20)
 
@@ -99,11 +95,70 @@ def ConfirmarEliminacion(txt_cveGru, txt_nomGru):
             print("\nGrupo " + txt_nomGru + " con clave " + txt_cveGru + " eliminado.")
         confirmacion.destroy()
 
-    btn_confirmar = tk.Button(confirmacion, text="Sí", font=("Arial", 12, "bold"), bg="white", fg="black", command=EliminarGrupo)
-    btn_confirmar.pack(side=tk.LEFT, padx=20)
+    btn_confirmar = tk.Button(confirmacion, text="Aceptar", font=("Arial", 12, "bold"), bg="white", fg="black", command=EliminarGrupo)
+    btn_confirmar.pack(side=tk.RIGHT, padx=35)
 
-    btn_cancelar = tk.Button(confirmacion, text="No", font=("Arial", 12, "bold"), bg="white", fg="black", command=confirmacion.destroy)
-    btn_cancelar.pack(side=tk.RIGHT, padx=20)
+    btn_cancelar = tk.Button(confirmacion, text="Cancelar", font=("Arial", 12, "bold"), bg="white", fg="black", command=confirmacion.destroy)
+    btn_cancelar.pack(side=tk.LEFT, padx=35)
+
+# Configuración de ventana emergente para actualizar
+def ActualizarForm(clave, nombre):
+    confirmacion = tk.Toplevel(window)
+    confirmacion.title("Actualizar Grupo")
+    confirmacion.geometry("300x150")
+    confirmacion.resizable(0, 0)
+    confirmacion.config(cursor="hand2")
+
+    # Etiquetas
+    lbl_Bienvenido = tk.Label(window, text="Actualizar Grupo", font=("Arial", 11))
+    lbl_Bienvenido.grid(row=0, column=0, padx=10, pady=10)
+
+    lbl_cveGru = tk.Label(window, text="Clave:", font=("Arial", 11, "bold"))
+    lbl_cveGru.grid(row=1, column=0, padx=10, pady=5)
+
+    lbl_nomGru = tk.Label(window, text="Nombre:", font=("Arial", 11, "bold"))
+    lbl_nomGru.grid(row=2, column=0, padx=10, pady=5)
+
+    txt_cveGru = tk.Entry(window, width=20, font=("Arial",12))
+    txt_cveGru.grid(row=1, column=1)
+
+    txt_nomGru = tk.Entry(window, width=20, font=("Arial",12))
+    txt_nomGru.grid(row=2, column=1)
+
+    # Entradas de texto
+    if (clave != "" and nombre == ""):
+        txt_cveGru.insert(0, clave)
+    elif (clave == "" and nombre != ""):
+        txt_nomGru.insert(0, nombre)
+    elif (clave != "" and nombre != ""):
+        txt_cveGru.insert(0, clave)
+        txt_nomGru.insert(0, nombre)
+
+    def EliminarGrupo():
+        if (txt_cveGru != "" and txt_nomGru == ""):
+            grupos.delete_one({"cveGru": txt_cveGru})
+            print("\nGrupo con clave " + txt_cveGru + " eliminado.")
+        elif (txt_cveGru == "" and txt_nomGru != ""):
+            grupos.delete_one({"nomGru": txt_nomGru})
+            print("\nGrupo con nombre " + txt_nomGru + " eliminado.")
+        else:
+            grupos.delete_one({"$and": [{"cveGru": txt_cveGru}, {"nomGru": txt_nomGru}]})
+            print("\nGrupo " + txt_nomGru + " con clave " + txt_cveGru + " eliminado.")
+        confirmacion.destroy()
+
+    btn_confirmar = tk.Button(confirmacion, text="Aceptar", font=("Arial", 12, "bold"), bg="white", fg="black", command=EliminarGrupo)
+    btn_confirmar.pack(side=tk.RIGHT, padx=35)
+
+    btn_cancelar = tk.Button(confirmacion, text="Cancelar", font=("Arial", 12, "bold"), bg="white", fg="black", command=confirmacion.destroy)
+    btn_cancelar.pack(side=tk.LEFT, padx=35)
+
+
+# Configuración de la ventana
+window = tk.Tk()
+window.title("Agregar Grupo")
+window.geometry("600x400")
+window.resizable(0, 0)
+window.config(cursor="hand2")
 
 # Etiquetas
 lbl_Bienvenido = tk.Label(window, text="Bienvenido(a)", font=("Arial", 11))
@@ -137,5 +192,9 @@ btn_limpiar.grid(row=1, column=4, pady=10)
 # Botón para eliminar grupo
 btn_eliminar = tk.Button(window, text="Eliminar", font=("Arial", 12, "bold"), bg="white", fg="black", command=Eliminar)
 btn_eliminar.grid(row=2, column=4, pady=10)
+
+# Botón para actualizar grupo
+btn_actualizar = tk.Button(window, text="Actualizar", font=("Arial", 12, "bold"), bg="white", fg="black", command=Actualizar)
+btn_actualizar.grid(row=2, column=4, pady=10)
 
 window.mainloop()
