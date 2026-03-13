@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from VenAlumno import AlumnosFrame
-#from VenGrupo import GruposFrame
+from VenGrupo import GruposFrame
 
 class SistemaPrincipal:
     def __init__(self, root):
@@ -47,8 +47,8 @@ class SistemaPrincipal:
         AlumnosFrame(self.contenedor_vistas, self.mostrar_home)
 
     def ir_a_grupos(self):
-       self.limpiar_pantalla()
-   #     GruposFrame(self.contenedor_vistas, self.mostrar_home)
+        self.limpiar_pantalla()
+        GruposFrame(self.contenedor_vistas, self.mostrar_home)
 
 if __name__ == "__main__":
     root = tk.Tk()
