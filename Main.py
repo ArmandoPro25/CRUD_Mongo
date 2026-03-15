@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from VenAlumno import AlumnosFrame
 from VenGrupo import GruposFrame
+from VenBackup import BackupFrame
 
 class SistemaPrincipal:
     def __init__(self, root):
         self.root = root
         self.root.title("SISTEMA DE CONTROL ESCOLAR")
-        self.root.geometry("1000x750")
+        self.root.geometry("1200x750")
         self.root.configure(bg="#f0f2f5")
 
         # Contenedor 
@@ -33,14 +34,15 @@ class SistemaPrincipal:
         btn_frame.pack(expand=True)
 
         # Botón Alumnos
-        tk.Button(btn_frame, text="GESTIONAR ALUMNOS", font=("Arial", 14, "bold"),
-                  bg="#4a90e2", fg="white", width=30, height=3, relief="flat",
+        tk.Button(btn_frame, text="GESTIONAR ALUMNOS", font=("Arial", 14, "bold"), bg="#4a90e2", fg="white", width=30, height=3, relief="flat",
                   command=self.ir_a_alumnos).pack(pady=20)
 
         # Botón Grupos
-        tk.Button(btn_frame, text="GESTIONAR GRUPOS", font=("Arial", 14, "bold"),
-                  bg="#2ecc71", fg="white", width=30, height=3, relief="flat",
+        tk.Button(btn_frame, text="GESTIONAR GRUPOS", font=("Arial", 14, "bold"), bg="#2ecc71", fg="white", width=30, height=3, relief="flat",
                   command=self.ir_a_grupos).pack(pady=20)
+        
+        tk.Button(btn_frame, text="GESTIONAR BASE DE DATOS", font=("Arial", 14, "bold"), bg="#e67e22", fg="white", width=30, height=3, relief="flat",
+                  command=self.ir_a_backup).pack(pady=20)
 
     def ir_a_alumnos(self):
         self.limpiar_pantalla()
@@ -49,6 +51,11 @@ class SistemaPrincipal:
     def ir_a_grupos(self):
         self.limpiar_pantalla()
         GruposFrame(self.contenedor_vistas, self.mostrar_home)
+    
+    def ir_a_backup(self):
+        self.limpiar_pantalla()
+        BackupFrame(self.contenedor_vistas, self.mostrar_home)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

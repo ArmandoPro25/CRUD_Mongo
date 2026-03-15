@@ -3,6 +3,8 @@ from tkinter import filedialog as fd
 import subprocess
 from pymongo import MongoClient as MC
 import MongoXML as xml
+from tkinter import messagebox
+from tkinter import ttk
 
 class GruposFrame:
     def __init__(self, parent, callback_home):
@@ -26,11 +28,9 @@ class GruposFrame:
         header = tk.Frame(self.window, bg="#2c3e50", height=80)
         header.pack(fill="x")
         
-        tk.Button(header, text=" Volver", command=self.callback_home,
-                  bg="#2c3e50", fg="white", relief='flat', cursor='hand2', font=("Arial", 11)).pack(side="left", padx=20)
+        tk.Button(header, text=" Volver", command=self.callback_home, bg="#2c3e50", fg="white", relief='flat', cursor='hand2', font=("Arial", 11)).pack(side="left", padx=20)
         
-        tk.Label(header, text="Gestión de Grupos", font=("Arial", 20, "bold"), 
-                 bg="#2c3e50", fg="white").pack(pady=15)
+        tk.Label(header, text="Gestión de Grupos", font=("Arial", 20, "bold"), bg="#2c3e50", fg="white").pack(pady=15)
         
         # Contenido principal
         content = tk.Frame(self.window, bg="#f0f2f5")
@@ -47,46 +47,69 @@ class GruposFrame:
         lbl_nomGru.grid(row=2, column=0, padx=10, pady=5)
 
         # Entradas de texto
-        self.txt_cveGru = tk.Entry(content, width=20, font=("Arial",12))
-        self.txt_cveGru.grid(row=1, column=1)
+        self.txt_cveGru = tk.Entry(content, width=20, font=("Arial", 12), bg="white", fg="#2c3e50", relief="solid", bd=1, highlightthickness=2, highlightcolor="#3498db", 
+                                   highlightbackground="#bdc3c7")
+        self.txt_cveGru.grid(row=1, column=1, ipady=5, padx=5)
 
-        self.txt_nomGru = tk.Entry(content, width=20, font=("Arial",12))
-        self.txt_nomGru.grid(row=2, column=1)
+        self.txt_nomGru = tk.Entry(content, width=20, font=("Arial", 12), bg="white", fg="#2c3e50", relief="solid", bd=1, highlightthickness=2, highlightcolor="#3498db",
+                                   highlightbackground="#bdc3c7")
+        self.txt_nomGru.grid(row=2, column=1, ipady=5, padx=5)
 
         # Botón para buscar grupo
-        btn_buscar = tk.Button(content, text=" Buscar ", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Buscar)
+        btn_buscar = tk.Button(content, text=" Buscar ", font=("Arial", 11, "bold"), bg="#3498db", fg="white",  relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#2980b9", activeforeground="white",
+                              command=self.Buscar)
         btn_buscar.grid(row=1, column=3, pady=10, padx=10)
 
         # Botón para agregar grupo
-        btn_agregar = tk.Button(content, text="Agregar ", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Agregar)
+        btn_agregar = tk.Button(content, text="Agregar ", font=("Arial", 11, "bold"), bg="#27ae60", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8,  activebackground="#229954", activeforeground="white",
+                               command=self.Agregar)
         btn_agregar.grid(row=2, column=3, pady=10, padx=10)
 
         # Botón para limpiar cajas de texto
-        btn_limpiar = tk.Button(content, text="  Limpiar  ", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Limpiar)
+        btn_limpiar = tk.Button(content, text="  Limpiar  ", font=("Arial", 11, "bold"), bg="#95a5a6", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#7f8c8d", activeforeground="white",
+                               command=self.Limpiar)
         btn_limpiar.grid(row=1, column=4, pady=10, padx=10)
 
         # Botón para eliminar grupo
-        btn_eliminar = tk.Button(content, text="Eliminar", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Eliminar)
+        btn_eliminar = tk.Button(content, text="Eliminar", font=("Arial", 11, "bold"), bg="#e74c3c", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#c0392b", activeforeground="white",
+                                command=self.Eliminar)
         btn_eliminar.grid(row=1, column=5, pady=10, padx=10)
 
         # Botón para eliminar todos los registros
-        btn_purgar = tk.Button(content, text=" Purgar ", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Purgar)
+        btn_purgar = tk.Button(content, text=" Purgar ", font=("Arial", 11, "bold"), bg="#c0392b", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#a93226", activeforeground="white",
+                              command=self.Purgar)
         btn_purgar.grid(row=2, column=5, pady=10, padx=10)
 
         # Botón para actualizar grupo
-        btn_actualizar = tk.Button(content, text="Actualizar", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Actualizar)
+        btn_actualizar = tk.Button(content, text="Actualizar", font=("Arial", 11, "bold"), bg="#f39c12", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#e67e22", activeforeground="white",
+                                   command=self.Actualizar)
         btn_actualizar.grid(row=2, column=4, pady=10, padx=10)
 
         # Botón para importar (Restore)
-        btn_importar = tk.Button(content, text="Importar", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Importar)
+        btn_importar = tk.Button(content, text="Importar", font=("Arial", 11, "bold"), bg="#16a085", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#138d75", activeforeground="white",
+                                command=self.Importar)
         btn_importar.grid(row=1, column=7, pady=10, padx=10)
 
         # Botón para exportar (Backup)
-        btn_exportar = tk.Button(content, text="Exportar", font=("Arial", 12, "bold"), bg="white", fg="black", command=self.Exportar)
+        btn_exportar = tk.Button(content, text="Exportar", font=("Arial", 11, "bold"), bg="#16a085", fg="white", relief="flat", bd=0, cursor="hand2", padx=20, pady=8, activebackground="#138d75", activeforeground="white",
+                                command=self.Exportar)
         btn_exportar.grid(row=2, column=7, pady=10, padx=10)
 
+        # Botón Backup BSON
+        btn_backup_bson = tk.Button(content, text="Backup BSON", font=("Arial", 11, "bold"), bg="#34495e", fg="white", relief="flat", bd=0, cursor="hand2", padx=15, pady=8, activebackground="#2c3e50", activeforeground="white",
+                            command=self.backup_bson)
+
+        btn_backup_bson.grid(row=3, column=6, pady=10, padx=10)
+
+        # Botón Restaurar BSON
+        btn_restore_bson = tk.Button(content, text="Restaurar BSON", font=("Arial", 11, "bold"), bg="#34495e", fg="white", relief="flat", bd=0, cursor="hand2", padx=15, pady=8, activebackground="#2c3e50", activeforeground="white",
+                             command=self.restaurar_bson)
+
+        btn_restore_bson.grid(row=3, column=7, pady=10, padx=10)
+        
         # Texto para mostrar resultados
-        self.txt_resultados = tk.Text(content, width=70, height=10)
+        self.txt_resultados = tk.Text(content, width=70, height=10, font=("Consolas", 10), bg="#ffffff", fg="#2c3e50", relief="solid", bd=1,  highlightthickness=1, highlightcolor="#3498db",highlightbackground="#bdc3c7",
+                                     padx=10, pady=10, wrap="word")
         self.txt_resultados.grid(row=3, column=0, columnspan=6, padx=10, pady=10)
 
         # Lista de importación
@@ -94,6 +117,8 @@ class GruposFrame:
         self.imp.set("JSON")
         opciones = ["JSON", "CSV", "XML"]
         impList = tk.OptionMenu(content, self.imp, *opciones)
+        impList.config(bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10, "bold"), relief="flat", bd=0, cursor="hand2", highlightthickness=0, activebackground="#bdc3c7")
+        impList["menu"].config(bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10))
         impList.grid(row=1, column=6, pady=10, padx=10)
 
         # Lista de exportación
@@ -101,21 +126,40 @@ class GruposFrame:
         self.exp.set("JSON")
         opciones = ["JSON", "CSV", "XML"]
         expList = tk.OptionMenu(content, self.exp, *opciones)
+        expList.config(bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10, "bold"), relief="flat", bd=0, cursor="hand2", highlightthickness=0, activebackground="#bdc3c7")
+        expList["menu"].config(bg="#ecf0f1", fg="#2c3e50", font=("Arial", 10))
         expList.grid(row=2, column=6, pady=10, padx=10)
 
         # Tabla de grupos
         table_frame = tk.Frame(self.window, bg="#f0f2f5")
         table_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
-        self.tree = tk.ttk.Treeview(table_frame, columns=("cve", "nom"), show="headings", height=8)
+        # Estilo para la tabla
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("Treeview", background="#ffffff", foreground="#2c3e50", rowheight=30, fieldbackground="#ffffff", font=("Arial", 10))
+        style.configure("Treeview.Heading", background="#34495e", foreground="white", font=("Arial", 11, "bold"), relief="flat")
+        style.map("Treeview", background=[("selected", "#3498db")])
+        style.map("Treeview.Heading", background=[("active", "#2c3e50")])
+
+        self.tree = ttk.Treeview(table_frame, columns=("cve", "nom"), show="headings", height=8)
         self.tree.heading("cve", text="Clave")
         self.tree.heading("nom", text="Nombre")
-        self.tree.column("cve", width=100)
-        self.tree.column("nom", width=200)
+        self.tree.column("cve", width=100, anchor="center")
+        self.tree.column("nom", width=200, anchor="w")
+        
+        # Scrollbar para la tabla
+        scrollbar = ttk.Scrollbar(table_frame, orient="vertical", command=self.tree.yview)
+        self.tree.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        
         self.tree.pack(fill="both", expand=True)
 
-        self.actualizar_tabla()
+        # Tags para filas alternas
+        self.tree.tag_configure("oddrow", background="#ecf0f1")
+        self.tree.tag_configure("evenrow", background="#ffffff")
 
+        self.actualizar_tabla()
     def actualizar_tabla(self):
         self.tree.delete(*self.tree.get_children())
         for grupo in self.grupos.find():
@@ -489,5 +533,51 @@ class GruposFrame:
 
     def LimpiarValidacion(self):
         self.txt_resultados.delete(1.0, tk.END)
+
+    def backup_bson(self):
+        archBackup = fd.asksaveasfilename(
+            title="Guardar backup BSON",
+            defaultextension=".bson",
+            filetypes=[("Archivos BSON","*.bson")]
+        )
+    
+        if archBackup:
+            try:
+                comando = [
+                    r"C:\Program Files\MongoDB\Tools\100\bin\mongodump.exe",
+                    "--db=BD_GrupoAlumno",
+                    "--collection=Grupo",
+                    f"--out={archBackup.replace('.bson', '')}"
+                ]
+                subprocess.run(comando, check=True)
+                self.LimpiarValidacion()
+                self.Validacion("Backup BSON creado correctamente.\n", "green")
+            except Exception as e:
+                self.LimpiarValidacion()
+                self.Validacion(f"Error al crear backup:\n{e}\n", "red")
+
+    def restaurar_bson(self):
+        carpetaRestore = fd.askdirectory(
+            title="Seleccionar carpeta del backup"
+        )
+    
+        if carpetaRestore:
+            try:
+                if messagebox.askyesno("Confirmar", "¿Restaurar este backup? Se sobrescribirán los datos"):
+     
+                    comando = [
+                        r"C:\Program Files\MongoDB\Tools\100\bin\mongorestore.exe",
+                        "--db=BD_GrupoAlumno",
+                        f"{carpetaRestore}/BD_GrupoAlumno"
+                    ]
+
+                    subprocess.run(comando, check=True)
+                    self.actualizar_tabla()
+                    self.LimpiarValidacion()
+                    self.Validacion("Backup BSON restaurado correctamente.\n", "green")
+
+            except Exception as e:
+                self.LimpiarValidacion()
+                self.Validacion(f"Error al restaurar:\n{e}\n", "red")
 
 
