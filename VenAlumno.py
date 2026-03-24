@@ -157,8 +157,27 @@ class AlumnosFrame:
                 messagebox.showwarning("Validación", "Todos los campos son obligatorios")
                 return
 
+       
+            if not cve.isdigit():
+                messagebox.showerror("Error", "La clave debe contener solo números")
+                return
+
+        
+            if not nom.replace(" ", "").isalpha():
+                messagebox.showerror("Error", "El nombre no puede contener números ni símbolos especiales")
+                return
+
+        
+            if len(nom) < 3 or len(nom) > 50:
+                messagebox.showerror("Error", "El nombre debe tener entre 3 y 50 caracteres")
+                return
+
             if self.db.Alumno.find_one({"cveAlu": cve}):
                 messagebox.showwarning("Error", f"La clave {cve} ya existe")
+                return
+
+            if not self.db.Grupo.find_one({"cveGru": gru}):
+                messagebox.showerror("Error", f"El grupo {gru} no existe. No se puede registrar el alumno.")
                 return
 
             self.db.Alumno.insert_one({
@@ -224,6 +243,22 @@ class AlumnosFrame:
                 lbl_msg.config(text="Todos los campos son obligatorios", fg="red")
                 return
 
+            if not nom.replace(" ", "").isalpha():
+                lbl_msg.config(text="El nombre no puede contener números ni símbolos especiales", fg="red")
+                return
+
+    
+            if len(nom) < 3 or len(nom) > 50:
+                lbl_msg.config(text="El nombre debe tener entre 3 y 50 caracteres", fg="red")
+                return
+
+
+            if (nom == alumno["nomAlu"] and 
+                int(eda) == alumno.get("edaAlu", 0) and 
+                gru == alumno.get("cveGru", "")):
+                lbl_msg.config(text="Ningún dato actualizado", fg="orange")
+                return
+
             try:
                 self.db.Alumno.update_one({"cveAlu": clave}, {"$set": {"nomAlu": nom, "edaAlu": int(eda), "cveGru": gru}})
                 mod_window.destroy()
@@ -231,6 +266,7 @@ class AlumnosFrame:
                 messagebox.showinfo("Éxito", "Alumno modificado correctamente")
             except ValueError:
                 lbl_msg.config(text="La edad debe ser un número", fg="red")
+
 
         btn_frame = tk.Frame(mod_window)
         btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
